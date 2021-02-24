@@ -23,11 +23,9 @@ class Service {
     var networking: Networking
 
     init() {
-        let baseURL = "https://oral-test.colgate-zhongan.cn"
+        let baseURL = "https://test.cn"
         let headers: [String: String] = [
-            "User-Agent": Bundle.main.userAgent,
-            "http-jz-account-id": "2605004",
-            "http-jz-token": "22176733f1743c8c3be133062e700c5f"
+            "User-Agent": Bundle.main.userAgent
         ]
         networking = Networking(baseURL: baseURL, headers: headers)
     }
@@ -68,7 +66,7 @@ public struct Member: Model {
 class ModuleService: Service {
     
     func fetchMember(completion: @escaping (Result<Member, Error>) -> Void) {
-        let request = Request(path: "/api/fedweb/user/member/info/get/1.0.0")
+        let request = Request(path: "/api/member")
         get(request, completion: completion)
     }
 
