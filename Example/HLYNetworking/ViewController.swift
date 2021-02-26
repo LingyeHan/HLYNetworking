@@ -8,23 +8,28 @@
 
 import UIKit
 
-
 class ViewController: UIViewController {
 
     let service = ModuleService()
     
     override func viewDidLoad() {
         super.viewDidLoad()
- 
+        fetchMember()
+    }
+    
+    @IBAction func getRequestAction(_ sender: Any) {
+        fetchMember()
+    }
+    
+    func fetchMember() {
         service.fetchMember { (result) in
             switch result {
             case .success(let member):
-                print("\n获取的数据: \(member)")
+                print("获取数据成功: \(member)")
             case .failure(let error):
-                print("\(error)")
+                print("获取数据失败: \(error)")
             }
         }
-        
     }
 
     override func didReceiveMemoryWarning() {

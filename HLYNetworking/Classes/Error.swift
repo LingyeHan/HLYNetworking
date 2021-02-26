@@ -12,6 +12,18 @@ public let kRequestErrorDomain: String = "com.hly.networking.request.error"
 public enum StatusCode {
     case informational, successful, redirection, clientError, serverError, cancelled, unknown
 }
+
+public enum RequestError: Int, Error {
+    case badRequest = 400
+    case unauthorised = 401
+    case userDisabled = 403
+    case notFound = 404
+    case methodNotAllowed = 405
+    case serverError = 500
+    case noConnection = -1009
+    case timeoutError = -1001
+}
+
 public extension Int {
 
     var statusCode: StatusCode {

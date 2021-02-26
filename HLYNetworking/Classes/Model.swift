@@ -62,10 +62,8 @@ open class JSONCoder {
         return decoder
     }()
     
-    public static func decode<T: Model>(data: Data?) throws -> T? {
-        guard let data = data else { return nil }
-        let model = try decoder.decode(T.self, from: data)
-        return model
+    public static func decode<T: Model>(data: Data) throws -> T {
+        return try decoder.decode(T.self, from: data)
     }
     
     public static func decode<T: Model>(JSONObject obj: Any) throws -> T {

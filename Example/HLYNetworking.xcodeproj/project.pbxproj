@@ -48,7 +48,7 @@
 		7C0D6BE1E8BACF01DE4F4D74 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		98D80C2171D435FAA3552D88 /* Pods-HLYNetworking_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HLYNetworking_Tests.debug.xcconfig"; path = "Target Support Files/Pods-HLYNetworking_Tests/Pods-HLYNetworking_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		A49CC213731D4E566F5D7F43 /* Pods-HLYNetworking_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HLYNetworking_Example.release.xcconfig"; path = "Target Support Files/Pods-HLYNetworking_Example/Pods-HLYNetworking_Example.release.xcconfig"; sourceTree = "<group>"; };
-		CA44EEE7513BBD7B7CBC15FE /* HLYNetworking.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = HLYNetworking.podspec; path = ../HLYNetworking.podspec; sourceTree = "<group>"; };
+		CA44EEE7513BBD7B7CBC15FE /* HLYNetworking.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = HLYNetworking.podspec; path = ../HLYNetworking.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */

@@ -7,18 +7,22 @@
 
 import Foundation
 import Alamofire
+//import AlamofireURLCache5
 
 public class Networking {
     var session: Session
     weak var request: Alamofire.Request?
     
     fileprivate var baseURL: String
+    let reachability = NetworkReachabilityManager.default
 
     public init(baseURL: String, headers: [String: String]? = nil, configuration: URLSessionConfiguration = URLSessionConfiguration.af.default) {
         self.baseURL = baseURL
         configuration.httpAdditionalHeaders = headers
         configuration.timeoutIntervalForRequest = 30
         configuration.timeoutIntervalForResource = 30
+        
+//        configuration.requestCachePolicy = .returnCacheDataElseLoad
         self.session = Session(configuration: configuration)
     }
 
@@ -32,15 +36,14 @@ public class Networking {
     
     public func requestJSONData<T: Model>(_ method: HTTPMethod, request: Request, completion: @escaping (Result<T, Error>) -> Void) {
         requestData(method, request: request) { result in
+            print("[HLYNetworking] Request Headers: \(URLSessionConfiguration.af.default.headers)\n\(result)")
+            
             switch result {
             case .success(let response):
-                debugPrint("[HLYNetworking] Response Data:\n \(response.data.json)")
-                
-                var object: T?
+                var object: T
                 do {
-                    object = try JSONCoder.decode(data: response.data)
-       
-                    completion(.success(object!))
+                    object = try JSONCoder.decode(data: response.data ?? [:].data)
+                    completion(.success(object))
                 } catch {
                     completion(.failure(error))
                 }
@@ -52,37 +55,57 @@ public class Networking {
 
     private func requestData(_ method: HTTPMethod, request: Request, completion: @escaping (Result<Response, Error>) -> Void) {
         let urlString = "\(request.baseUrl ?? baseURL)\(request.path)"
-        guard let url = try? urlString.asURL() else { fatalError("Invalid URL: \(urlString)") }
- 
-        var encoding: ParameterEncoding = URLEncoding.default
-        if let type = request.encodingType {
-            encoding = type
-        } else {
-            if method == .post || method == .put || method == .patch {
-                encoding = JSONEncoding.default
-            }
-        }
-        self.request = session.request(url, method: method, parameters: request.parameters, encoding: encoding, headers: nil)
-            //.validate(statusCode: 200..<300)
-            .response(completionHandler: { response in
-                
-                if let statusCode = response.response?.statusCode, statusCode > 200 {
-                    let error = response.error ?? NSError(
-                                domain: kRequestErrorDomain,
-                                code: statusCode,
-                                userInfo: ["data": response.data?.json ?? [:]]
-                             ) as Error
-                    completion(.failure(error))
+        guard let url = try? urlString.asURL() else { fatalError("[HLYNetworking] Invalid URL: \(urlString)") }
+        
+        // Read Cache
+        if method == .get, request.isCache {
+            if let data = Storage.shared.object(forKey: urlString) as? Data {
+                completion(.success(Response(data: data,
+                                             headers: ["cache": true])))
+                if !request.refreshCache {
                     return
                 }
-                guard let data = response.data else {
-                    fatalError("Response data is null")
+            }
+        }
+//        if reachability?.isReachable == false {
+//            completion(.failure(RequestError.noConnection))
+//            return
+//        }
+ 
+        let encoding: ParameterEncoding = request.encodingType ?? URLEncoding.default
+//        let cacher = ResponseCacher(behavior: .cache)
+        self.request = session.request(url, method: method, parameters: request.parameters, encoding: encoding)
+//            .cacheResponse(using: cacher)
+            //.validate(statusCode: 200..<300)
+            //.responseJSON(completionHandler: { response in
+            .response(completionHandler: { response in
+                
+                switch response.result {
+                case .success(let data):
+                    if let statusCode = response.response?.statusCode, statusCode > 200 {
+                        let error = response.error ?? NSError(
+                                    domain: kRequestErrorDomain,
+                                    code: statusCode,
+                                    userInfo: data?.json ?? [:]
+                                 ) as Error
+                        completion(.failure(error))
+                        return
+                    }
+                    
+                    // Write Cache
+                    if method == .get, request.isCache, let data = response.data {
+                        Storage.shared.setObject(data, forKey: urlString)
+                    }
+                    
+                    let response = Response(data: response.data,
+                             headers: response.response?.allHeaderFields as? [String: Any])
+                    completion(.success(response))
+                case .failure(let error):
+                    completion(.failure(error))
                 }
                 
-                let response = Response(data: data,
-                         headers: response.response?.allHeaderFields as? [String: Any])
-                completion(.success(response))
-            })
+ 
+            })//.cache(maxAge: 6*60*60, isPrivate: false, ignoreServer: true)
     }
     
     public func cancel() {

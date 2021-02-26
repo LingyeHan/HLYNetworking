@@ -7,6 +7,17 @@
 
 import Foundation
 
+extension Result: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .success(let value):
+            return "\(value)"
+        case .failure(let error):
+            return error.localizedDescription
+        }
+    }
+}
+
 extension Bundle {
     
     public var osName: String {
@@ -57,7 +68,7 @@ public extension Data {
 
     var json: [String: Any] {
         do {
-            let jsonObject = try JSONSerialization.jsonObject(with: self, options: JSONSerialization.ReadingOptions.mutableLeaves)
+            let jsonObject = try JSONSerialization.jsonObject(with: self, options: JSONSerialization.ReadingOptions.fragmentsAllowed)
             return (jsonObject as? [String : Any]) ?? [:]
         } catch {
             print(error)
@@ -73,5 +84,12 @@ public extension Data {
             print(error)
         }
         return nil
+    }
+}
+
+public extension Dictionary {
+    
+    var data: Data {
+        return try! JSONSerialization.data(withJSONObject: self, options: .prettyPrinted)
     }
 }

@@ -23,7 +23,7 @@ class Service {
     var networking: Networking
 
     init() {
-        let baseURL = "https://test.cn"
+        let baseURL = "https://httpbin.org"
         let headers: [String: String] = [
             "User-Agent": Bundle.main.userAgent
         ]
@@ -66,7 +66,8 @@ public struct Member: Model {
 class ModuleService: Service {
     
     func fetchMember(completion: @escaping (Result<Member, Error>) -> Void) {
-        let request = Request(path: "/api/member")
+        let request = Request(path: "/status/200")
+        request.isCache = true
         get(request, completion: completion)
     }
 
