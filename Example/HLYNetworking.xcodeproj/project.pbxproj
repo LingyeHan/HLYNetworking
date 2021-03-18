@@ -45,6 +45,7 @@
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		6944E60925E626F1001975B9 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
+		69A41D6F2603379C00F5D903 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../Package.swift; sourceTree = "<group>"; };
 		7C0D6BE1E8BACF01DE4F4D74 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		98D80C2171D435FAA3552D88 /* Pods-HLYNetworking_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HLYNetworking_Tests.debug.xcconfig"; path = "Target Support Files/Pods-HLYNetworking_Tests/Pods-HLYNetworking_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		A49CC213731D4E566F5D7F43 /* Pods-HLYNetworking_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HLYNetworking_Example.release.xcconfig"; path = "Target Support Files/Pods-HLYNetworking_Example/Pods-HLYNetworking_Example.release.xcconfig"; sourceTree = "<group>"; };
@@ -146,6 +147,7 @@
 		607FACF51AFB993E008FA782 /* Podspec Metadata */ = {
 			isa = PBXGroup;
 			children = (
+				69A41D6F2603379C00F5D903 /* Package.swift */,
 				CA44EEE7513BBD7B7CBC15FE /* HLYNetworking.podspec */,
 				0696D3EF8B478BF34370E05D /* README.md */,
 				7C0D6BE1E8BACF01DE4F4D74 /* LICENSE */,
