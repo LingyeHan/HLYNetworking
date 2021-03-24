@@ -19,6 +19,13 @@ public struct Response<T: Model>: Model {
     var result: T?
 }
 
+public struct ResponseBool: Model {
+    var code: String
+    var message: String
+    var result: Bool
+    
+}
+
 class Service {
     var networking: Networking
 
@@ -45,6 +52,24 @@ class Service {
                 let code = Int(response.code)!
                 if ResultCode(rawValue: code) == .success, let result = response.result {
                     completion(.success(result))
+                } else {
+                    let error = NSError(domain: kRequestErrorDomain, code: code, userInfo: ["message": response.message]) as Error
+                    completion(.failure(error))
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+        networking.requestJSONData(method, request: request, completion: responseCompletion)
+    }
+    
+    func requestData(_ method: HTTPMethod, request: HLYNetworking.Request, completion: @escaping (Result<Bool, Error>) -> Void) {
+        let responseCompletion: ((Result<ResponseBool, Error>) -> Void) = { result in
+            switch result {
+            case .success(let response):
+                let code = Int(response.code)!
+                if ResultCode(rawValue: code) == .success {
+                    completion(.success(response.result))
                 } else {
                     let error = NSError(domain: kRequestErrorDomain, code: code, userInfo: ["message": response.message]) as Error
                     completion(.failure(error))

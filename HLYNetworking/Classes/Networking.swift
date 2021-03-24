@@ -54,6 +54,9 @@ public class Networking {
     }
 
     private func requestData(_ method: HTTPMethod, request: Request, completion: @escaping (Result<Response, Error>) -> Void) {
+        
+        print("[HLYNetworking] \(request.description)")
+        
         let urlString = "\(request.baseUrl ?? baseURL)\(request.path)"
         guard let url = try? urlString.asURL() else { fatalError("[HLYNetworking] Invalid URL: \(urlString)") }
         
@@ -104,7 +107,11 @@ public class Networking {
                     completion(.failure(error))
                 }
                 
- 
+                if let notification = request.notification {
+                    DispatchQueue.main.async {
+                        NotificationCenter.default.post(name: notification, object: nil)
+                    }
+                }
             })//.cache(maxAge: 6*60*60, isPrivate: false, ignoreServer: true)
     }
     

@@ -16,6 +16,7 @@ open class Request: CustomStringConvertible {
     open var parameters: [String: Any]?
     open var isCache: Bool
     open var refreshCache: Bool
+    open var notification: Notification.Name?
 
     public init(
         baseUrl: String? = nil,
