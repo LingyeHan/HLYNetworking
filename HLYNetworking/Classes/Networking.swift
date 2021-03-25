@@ -55,10 +55,9 @@ public class Networking {
 
     private func requestData(_ method: HTTPMethod, request: Request, completion: @escaping (Result<Response, Error>) -> Void) {
         
-        print("[HLYNetworking] \(request.description)")
-        
         let urlString = "\(request.baseUrl ?? baseURL)\(request.path)"
         guard let url = try? urlString.asURL() else { fatalError("[HLYNetworking] Invalid URL: \(urlString)") }
+        print("[HLYNetworking] Request URL: \(urlString)")
         
         // Read Cache
         if method == .get, request.isCache {
@@ -75,13 +74,14 @@ public class Networking {
 //            return
 //        }
  
-        let encoding: ParameterEncoding = request.encodingType ?? URLEncoding.default
+        let encoding: ParameterEncoding = request.encodingType ?? (method == .get ? .default : JSONEncoding())
 //        let cacher = ResponseCacher(behavior: .cache)
         self.request = session.request(url, method: method, parameters: request.parameters, encoding: encoding)
 //            .cacheResponse(using: cacher)
             //.validate(statusCode: 200..<300)
             //.responseJSON(completionHandler: { response in
             .response(completionHandler: { response in
+                print("[HLYNetworking] Response Data: \(response.data?.json)")
                 
                 switch response.result {
                 case .success(let data):
