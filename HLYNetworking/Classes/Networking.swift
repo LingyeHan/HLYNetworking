@@ -36,8 +36,6 @@ public class Networking {
     
     public func requestJSONData<T: Model>(_ method: HTTPMethod, request: Request, completion: @escaping (Result<T, Error>) -> Void) {
         requestData(method, request: request) { result in
-            print("[HLYNetworking] Request Headers: \(URLSessionConfiguration.af.default.headers)\n\(result)")
-            
             switch result {
             case .success(let response):
                 var object: T
@@ -57,7 +55,6 @@ public class Networking {
         
         let urlString = "\(request.baseUrl ?? baseURL)\(request.path)"
         guard let url = try? urlString.asURL() else { fatalError("[HLYNetworking] Invalid URL: \(urlString)") }
-        print("[HLYNetworking] Request URL: \(urlString)")
         
         // Read Cache
         if method == .get, request.isCache {
@@ -81,7 +78,7 @@ public class Networking {
             //.validate(statusCode: 200..<300)
             //.responseJSON(completionHandler: { response in
             .response(completionHandler: { response in
-                print("[HLYNetworking] Response Data: \(response.data?.json)")
+                print("[HLYNetworking] Request URL: \(url)\nRequest Headers: \(URLSessionConfiguration.af.default.headers)\nResponse Data:  \(response.data?.json)")
                 
                 switch response.result {
                 case .success(let data):
