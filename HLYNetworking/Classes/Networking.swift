@@ -78,7 +78,7 @@ public class Networking {
             //.validate(statusCode: 200..<300)
             //.responseJSON(completionHandler: { response in
             .response(completionHandler: { response in
-                print("[HLYNetworking] Request URL: \(url)\nRequest Headers: \(URLSessionConfiguration.af.default.headers)\nResponse Data:  \(response.data?.json)")
+                print("[HLYNetworking] Request URL: \(url)\nRequest Headers: \(URLSessionConfiguration.af.default.headers)\nResponse Data:  \((response.data ?? Data()).json)")
                 
                 switch response.result {
                 case .success(let data):
